@@ -14,20 +14,28 @@ var ImgurZipAlbum = (function() {
     function imgLoad()
     {
         var id = $(this).attr('data-imgur-id');
-        //var data = getImgAsBase64PNG(this);
-        var file = getImgAsFile(this);
-        var fr = new FileReader();
-        fr.onload = (function(id){
-            return function(e){ dataLoad(id, e.target.result); };
-        })(id);
-        fr.readAsBinaryString(file);
-    };
+        
+        if( $.browser.mozilla )
+        {
+            var file = getImgAsFile(this);
+            var fr = new FileReader();
+            fr.onload = (function(id){
+                return function(e){ dataLoad(id, e.target.result, {base64:false, binary:true}); };
+            })(id);
+            fr.readAsBinaryString(file);
+        }
+        else
+        {
+            var data = getImgAsBase64PNG(this);
+            dataLoad(id, data, {base64:true});
+        }
+    }
     
-    function dataLoad(id, data)
+    function dataLoad(id, data, options)
     {
         if( data.length > 6 )
         {
-            zip.file(id+'.jpg', data, {base64:false, binary:true});
+            zip.file(id+'.jpg', data, options);
             console.log('Succesful: ' + id);
         }
         else
@@ -41,7 +49,7 @@ var ImgurZipAlbum = (function() {
             console.log('Generating zip...');
             location.href = "data:application/zip;base64," + zip.generate();
         }
-    };
+    }
     
     //GO!
     for( var i in imageIDs )
@@ -93,10 +101,9 @@ function getImgAsBase64PNG(img) {
 //load helper scripts (jQuery should already be loaded by imgur)
 $.ajaxSetup({cache: true});
 $.getScript(BASEURL + 'js/jszip.js', function() {
-$.getScript(BASEURL + 'js/jszip-deflate.js', function() {
 $.getScript(BASEURL + 'js/swfobject.js', function() {
 $.getScript(BASEURL + 'js/downloadify.min.js', function() {
     ImgurZipAlbum(); //fire off processing
-}); }); }); });
+}); }); });
 
 })(jQuery);
