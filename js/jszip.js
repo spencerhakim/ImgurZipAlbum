@@ -36,7 +36,7 @@ var JSZip = function(data, options)
    this.root = "";
 
    if(data) this.load(data, options);
-}
+};
 
 JSZip.signature = {
    LOCAL_FILE_HEADER : "\x50\x4b\x03\x04",
@@ -146,7 +146,7 @@ JSZip.prototype = (function ()
       o.date = o.date || new Date();
 
       return o;
-   }
+   };
 
   /**
    * Add a file in the current folder.
@@ -241,7 +241,7 @@ JSZip.prototype = (function ()
       dosDate = dosDate << 5;
       dosDate = dosDate | o.date.getDate();
 
-      if (o.base64 === true) data = JSZipBase64.decode(data);
+      if (o.base64 === true) data = atob(data);
       // decode UTF-8 strings if we are dealing with text data
       if(o.binary === false) data = this.utf8encode(data);
 
@@ -505,7 +505,7 @@ JSZip.prototype = (function ()
          "\x00\x00";
 
          var zip = fileData + dirData + dirEnd;
-         return (options.base64) ? JSZipBase64.encode(zip) : zip;
+         return (options.base64) ? btoa(zip) : zip;
       },
 
       /**
@@ -640,87 +640,6 @@ JSZip.compressions = {
       }
    }
 };
-
-/**
- *
- *  Base64 encode / decode
- *  http://www.webtoolkit.info/
- *
- *  Hacked so that it doesn't utf8 en/decode everything
- **/
-var JSZipBase64 = function() {
-   // private property
-   var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-
-   return {
-      // public method for encoding
-      encode : function(input, utf8) {
-         var output = "";
-         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-         var i = 0;
-
-         while (i < input.length) {
-
-            chr1 = input.charCodeAt(i++);
-            chr2 = input.charCodeAt(i++);
-            chr3 = input.charCodeAt(i++);
-
-            enc1 = chr1 >> 2;
-            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-            enc4 = chr3 & 63;
-
-            if (isNaN(chr2)) {
-               enc3 = enc4 = 64;
-            } else if (isNaN(chr3)) {
-               enc4 = 64;
-            }
-
-            output = output +
-               _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
-               _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
-
-         }
-
-         return output;
-      },
-
-      // public method for decoding
-      decode : function(input, utf8) {
-         var output = "";
-         var chr1, chr2, chr3;
-         var enc1, enc2, enc3, enc4;
-         var i = 0;
-
-         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-         while (i < input.length) {
-
-            enc1 = _keyStr.indexOf(input.charAt(i++));
-            enc2 = _keyStr.indexOf(input.charAt(i++));
-            enc3 = _keyStr.indexOf(input.charAt(i++));
-            enc4 = _keyStr.indexOf(input.charAt(i++));
-
-            chr1 = (enc1 << 2) | (enc2 >> 4);
-            chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-            chr3 = ((enc3 & 3) << 6) | enc4;
-
-            output = output + String.fromCharCode(chr1);
-
-            if (enc3 != 64) {
-               output = output + String.fromCharCode(chr2);
-            }
-            if (enc4 != 64) {
-               output = output + String.fromCharCode(chr3);
-            }
-
-         }
-
-         return output;
-
-      }
-   };
-}();
 
 // enforcing Stuk's coding style
 // vim: set shiftwidth=3 softtabstop=3:
