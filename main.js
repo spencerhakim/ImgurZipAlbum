@@ -2,6 +2,8 @@
 
 //define some stuff
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
+var FILETYPE = '.jpg';
+var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 
 var ImgurZipAlbum = (function() {
     var albumID = $('[id^=album-]').attr('id').split('-')[1];
@@ -11,11 +13,12 @@ var ImgurZipAlbum = (function() {
     console.log('AlbumID = ' + albumID);
     console.log('ImageIDs= ' + imageIDs);
     
+    //called once the image has been downloaded
     function imgLoad()
     {
         var id = $(this).attr('data-imgur-id');
         
-        if( $.browser.mozilla )
+        if( $.browser.mozilla ) //mozilla support a faster method
         {
             var file = getImgAsFile(this);
             var fr = new FileReader();
@@ -26,28 +29,38 @@ var ImgurZipAlbum = (function() {
         }
         else
         {
-            var data = getImgAsBase64PNG(this);
+            var data = getImgAsBase64(this);
             dataLoad(id, data, {base64:true});
         }
     }
     
+    //called when image fails to load
+    function imgError()
+    {
+        var id = $(this).attr('data-imgur-id');
+        imageIDs = $(imageIDs).not([id]);
+        console.warn('Failed: ' + id);
+        
+        checkZip();
+    }
+    
+    //called when base64/binary data is available
     function dataLoad(id, data, options)
     {
-        if( data.length > 6 )
-        {
-            zip.file(id+'.jpg', data, options);
-            console.log('Succesful: ' + id);
-        }
-        else
-        {
-            imageIDs = $(imageIDs).not([id]);
-            console.warn('Failed: ' + id);
-        }
+        zip.file(id+FILETYPE, data, options);
+        console.log('Succesful: ' + id);
         
+        checkZip();
+    }
+    
+    //called whenever an image is processed or fails to load
+    function checkZip()
+    {
+        //make sure everything has been downloaded (or failed)
         if( Object.keys(zip.files).length === imageIDs.length )
         {
             console.log('Generating zip...');
-            location.href = "data:application/zip;base64," + zip.generate();
+            location.href = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
         }
     }
     
@@ -57,14 +70,16 @@ var ImgurZipAlbum = (function() {
         if( imageIDs.hasOwnProperty(i) )
         {
             $('<img />')
-                .attr('src', 'http://imgur.com/download/'+imageIDs[i])
+                .load(imgLoad)
+                .error(imgError)
                 .attr('data-imgur-id', imageIDs[i])
-                .load(imgLoad);
+                .attr('src', 'http://imgur.com/download/'+imageIDs[i]);
         }
     }
     
 });
 
+//Eventually, browsers will implement canvas.toBlob, and I'll switch to that
 function getImgAsFile(img)
 {
     // Create an empty canvas element
@@ -76,11 +91,11 @@ function getImgAsFile(img)
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
     
-    return canvas.mozGetAsFile($(this).attr('data-imgur-id')+'.jpg', 'image/jpeg');
+    return canvas.mozGetAsFile( $(this).attr('data-imgur-id')+FILETYPE, MIMETYPE);
 }
 
 // http://stackoverflow.com/a/934925/489071
-function getImgAsBase64PNG(img) {
+function getImgAsBase64(img) {
     // Create an empty canvas element
     var canvas = document.createElement("canvas");
     canvas.width = img.width;
@@ -94,7 +109,7 @@ function getImgAsBase64PNG(img) {
     // Firefox supports PNG and JPEG. You could check img.src to
     // guess the original format, but be aware the using "image/jpg"
     // will re-encode the image.
-    var dataURL = canvas.toDataURL("image/jpeg", 0.95);
+    var dataURL = canvas.toDataURL(MIMETYPE, 0.95);
     return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
 }
 
