@@ -90,14 +90,14 @@ var ImgurZipAlbum = (function() {
     //GO!
     for( var i in imageIDs )
     {
-        if( imageIDs.hasOwnProperty(i) )
-        {
-            $('<img />')
-                .load(imgLoad)
-                .error(imgError)
-                .attr('data-imgur-id', imageIDs[i])
-                .attr('src', 'http://imgur.com/download/'+imageIDs[i]);
-        }
+        if( !imageIDs.hasOwnProperty(i) )
+            continue;
+        
+        $('<img />')
+            .load(imgLoad)
+            .error(imgError)
+            .attr('data-imgur-id', imageIDs[i])
+            .attr('src', 'http://imgur.com/download/'+imageIDs[i]);
     }
     
 });
