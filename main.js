@@ -1,17 +1,40 @@
 (function($) {
 
+//make sure we're on imgur
+if( location.hostname !== 'imgur.com' )
+{
+    console.log('Heyyy, this isnt imgur...');
+    return;
+}
+
+//check for jQuery
+if( typeof($) === 'undefined' )
+{
+    console.error('jQuery missing');
+    alert('Unable to download album, an error occured');
+    return;
+}
+
 //define some stuff
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
 var FILETYPE = '.jpg';
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 
 var ImgurZipAlbum = (function() {
+    
     var albumID = $('[id^=album-]').attr('id').split('-')[1];
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
     var zip = new JSZip();
     
     console.log('AlbumID = ' + albumID);
     console.log('ImageIDs= ' + imageIDs);
+    
+    //make sure we have some image IDs
+    if( imageIDs.length === 0 )
+    {
+        alert("This album appears to be empty...");
+        return;
+    }
     
     //called once the image has been downloaded
     function imgLoad()
@@ -95,7 +118,8 @@ function getImgAsFile(img)
 }
 
 // http://stackoverflow.com/a/934925/489071
-function getImgAsBase64(img) {
+function getImgAsBase64(img)
+{
     // Create an empty canvas element
     var canvas = document.createElement("canvas");
     canvas.width = img.width;
