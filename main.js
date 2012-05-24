@@ -115,11 +115,11 @@ var ImgurZipAlbum = (function() {
     }
     
     //add status div
-    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div id="imgurZipAlbum" class="textbox" /></div>') );
+    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /><div id="imgurZipAlbum" class="textbox" /></div>') );
     var $statusDiv = $('#imgurZipAlbum');
     
     //initialize status
-    var statusMsg = '<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> %IMGS%/%IMGL% loaded';
+    var statusMsg = '<span class="stat">%IMGS%</span> of <span class="stat">%IMGL%</span> images downloaded...';
     $statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
     
     //start grabbing all the images
