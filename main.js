@@ -6,9 +6,8 @@ if( !console )
 }
 
 //make sure we're on imgur
-if( location.hostname !== 'imgur.com' )
-    { console.log('Heyyy, this isnt imgur...'); }
-else {
+if( location.hostname === 'imgur.com' )
+{
 
 (function($) {
 
@@ -16,7 +15,6 @@ else {
 var $album = $('div[id^=album-].nodisplay');
 if( $album.length === 0 )
 {
-    console.log('Not an album');
     alert('Hey, this isn\'t an album!');
     return;
 }
@@ -34,9 +32,9 @@ var ImgurZipAlbum = (function() {
     {
         setTimeout(function(dis) {
             var id = $(dis).data('imgur-id');
-            var data = getImgAsBase64(dis);
-            zip.file(id+FILETYPE, atob(data), {base64:false, binary:true} ); //store binary data in memory, should take up less space
-            console.log('Succesful: ' + id);
+            var data = atob(getImgAsBase64(dis));
+            zip.file(id+FILETYPE, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
+            console.log('Succesful: '+id+', '+(data.length/1024)+'kB');
             
             checkZip();
         }, TIMEOUT, this);
