@@ -22,7 +22,7 @@ if( $album.length === 0 )
 
 //define some stuff
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
-var FILETYPE = '.png'; //($.browser.mozilla ? '.jpg' : '.png');
+var FILETYPE = '.jpg';
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 var TIMEOUT = 50; //ms
 
