@@ -1,17 +1,22 @@
-(function($) {
-
 //make sure we're on imgur
 if( location.hostname !== 'imgur.com' )
-{
     console.log('Heyyy, this isnt imgur...');
-    return;
-}
+else
+(function($) {
 
 //check for jQuery
 if( typeof($) === 'undefined' )
 {
-    console.error('jQuery missing');
+    console.log('jQuery missing');
     alert('Unable to download album, an error occured');
+    return;
+}
+
+//make sure this is an album
+if( $('div[id^=album-].nodisplay').length === 0 )
+{
+    console.log('Not an album');
+    alert('Hey, this isn\'t an album!');
     return;
 }
 
@@ -22,7 +27,7 @@ var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 
 var ImgurZipAlbum = (function() {
     
-    var albumID = $('[id^=album-]').attr('id').split('-')[1];
+    var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
     var zip = new JSZip();
     
