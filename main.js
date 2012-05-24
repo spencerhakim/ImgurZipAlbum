@@ -77,9 +77,9 @@ var ImgurZipAlbum = (function() {
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
-            $statusDiv = $statusDiv.parent();
+            $statusDiv.html('Generating zip... (your browser may appear to freeze during this process)');
             
-            $statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may appear to freeze during this process)');
+            $statusDiv = $statusDiv.closest('.panel');
             $statusDiv.downloadify({
                 filename: albumName + '.zip',
                 data: zip.generate(),
@@ -115,8 +115,8 @@ var ImgurZipAlbum = (function() {
     }
     
     //add status div
-    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /><div id="imgurZipAlbum" class="textbox" /></div>') );
-    var $statusDiv = $('#imgurZipAlbum');
+    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div class="textbox"><img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span></div></div>') );
+    var $statusDiv = $('#IZAstatus');
     
     //initialize status
     var statusMsg = '<span class="stat">%IMGS%</span> of <span class="stat">%IMGL%</span> images downloaded...';
