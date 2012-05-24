@@ -112,7 +112,7 @@ var ImgurZipAlbum = (function() {
     }
     
     //add status div
-    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px"><div id="imgurZipAlbum" class="textbox" /></div>') );
+    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div id="imgurZipAlbum" class="textbox" /></div>') );
     var $statusDiv = $('#imgurZipAlbum');
     
     //initialize status
