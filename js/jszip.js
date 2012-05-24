@@ -263,7 +263,7 @@ JSZip.prototype = (function ()
       // last mod file date
       header += decToHex(dosDate, 2);
       // crc-32
-      header += decToHex(this.crc32( data.split('') ), 4);
+      header += decToHex(this.crc32(data), 4);
       // compressed size
       header += decToHex(compressedData.length, 4);
       // uncompressed size
