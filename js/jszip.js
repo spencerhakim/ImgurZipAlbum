@@ -561,7 +561,7 @@ JSZip.prototype = (function ()
           crc = crc ^ (-1);
           for( var i = 0, iTop = data.length; i < iTop; i++ )
           {
-              octet = (crc ^ data[i].charCodeAt(0)) & 0xff;
+              octet = (crc ^ data.charCodeAt(i)) & 0xff;
               crc = (crc >>> 8) ^ crc32table[octet];
           }
 
