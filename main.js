@@ -22,7 +22,7 @@ if( $album.length === 0 )
 
 //define some stuff
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
-var FILETYPE = '.jpg';
+var FILETYPE = ($.browser.mozilla ? '.jpg' : '.png');
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 
 var ImgurZipAlbum = (function() {
@@ -32,7 +32,7 @@ var ImgurZipAlbum = (function() {
     {
         var id = $(this).data('imgur-id');
         
-        if( $.browser.mozilla ) //mozilla support a faster method
+        if( $.browser.mozilla ) //mozilla supports a faster method
         {
             var file = getImgAsFile(this);
             var fr = new FileReader();
