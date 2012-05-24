@@ -86,7 +86,7 @@ var ImgurZipAlbum = (function() {
             console.log('Generating zip...');
             statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may freeze during this process)');
             location.href = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
-            $(body).remove(statusDiv);
+            statusDiv.parent().remove();
         }
     }
     
