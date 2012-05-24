@@ -78,10 +78,19 @@ var ImgurZipAlbum = (function() {
         {
             console.log('Generating zip...');
             $statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may appear to freeze during this process)');
-            var uri = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
-            
-            //put Downloadify setup here
-            //$statusDiv.parent().remove();
+            $statusDiv.downloadify({
+                filename: albumID + '.zip',
+                data: zip.generate(),
+                dataType: 'base64',
+                
+                onError: function(){ alert('An error occurred, sorry!'); },
+                
+                swf: BASEURL + 'media/downloadify.swf',
+                downloadImage: BASEURL + 'media/download.png',
+                width: 84,
+                height: 25,
+                transparent: true
+            });
         }
     }
     
