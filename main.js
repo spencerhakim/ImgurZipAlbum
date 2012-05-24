@@ -11,16 +11,9 @@ if( location.hostname !== 'imgur.com' )
 else
 (function($) {
 
-//check for jQuery
-if( typeof($) === 'undefined' )
-{
-    console.log('jQuery missing');
-    alert('Unable to download album, an error occured');
-    return;
-}
-
 //make sure this is an album
-if( $('div[id^=album-].nodisplay').length === 0 )
+var $album = $('div[id^=album-].nodisplay');
+if( $album.length === 0 )
 {
     console.log('Not an album');
     alert('Hey, this isn\'t an album!');
@@ -37,7 +30,7 @@ var ImgurZipAlbum = (function() {
     //called once the image has been downloaded
     function imgLoad()
     {
-        var id = $(this).attr('data-imgur-id');
+        var id = $(this).data('imgur-id');
         
         if( $.browser.mozilla ) //mozilla support a faster method
         {
@@ -58,7 +51,7 @@ var ImgurZipAlbum = (function() {
     //called when image fails to load
     function imgError()
     {
-        var id = $(this).attr('data-imgur-id');
+        var id = $(this).data('imgur-id');
         imageIDs = $(imageIDs).not([id]).get();
         console.log('Failed: ' + id);
         
@@ -78,23 +71,24 @@ var ImgurZipAlbum = (function() {
     function checkZip()
     {
         var filesLoaded = Object.keys(zip.files).length;
-        statusDiv.html( statusMsg.replace('%IMGS%', filesLoaded).replace('%IMGL%', imageIDs.length) );
+        $statusDiv.html( statusMsg.replace('%IMGS%', filesLoaded).replace('%IMGL%', imageIDs.length) );
         
         //make sure everything has been downloaded (or failed)
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
-            statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may freeze during this process)');
+            $statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may appear to freeze during this process)');
             var uri = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
-            statusDiv.parent().remove();
-            location.href = uri;
+            
+            //put Downloadify setup here
+            //$statusDiv.parent().remove();
         }
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
+    var albumID = $album.attr('id').split('-')[1] + ' - ' + $album.data('title');
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
     var zip = new JSZip();
     
@@ -109,12 +103,12 @@ var ImgurZipAlbum = (function() {
     }
     
     //add status div
-    $(body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px"><div id="imgurZipAlbum" class="textbox" /></div>') );
-    var statusDiv = $('#imgurZipAlbum');
+    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px"><div id="imgurZipAlbum" class="textbox" /></div>') );
+    var $statusDiv = $('#imgurZipAlbum');
     
     //initialize status
     var statusMsg = '<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> %IMGS%/%IMGL% loaded';
-    statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
+    $statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
     
     //start grabbing all the images
     for( var i in imageIDs )
@@ -125,7 +119,7 @@ var ImgurZipAlbum = (function() {
         $('<img />')
             .load(imgLoad)
             .error(imgError)
-            .attr('data-imgur-id', imageIDs[i])
+            .data('imgur-id', imageIDs[i])
             .attr('src', 'http://imgur.com/download/'+imageIDs[i]);
     }
     
@@ -143,7 +137,7 @@ function getImgAsFile(img)
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
     
-    return canvas.mozGetAsFile( $(this).attr('data-imgur-id')+FILETYPE, MIMETYPE);
+    return canvas.mozGetAsFile( $(this).data('imgur-id')+FILETYPE, MIMETYPE);
 }
 
 // http://stackoverflow.com/a/934925/489071
