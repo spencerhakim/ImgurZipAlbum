@@ -22,8 +22,9 @@ if( $album.length === 0 )
 
 //define some stuff
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
-var FILETYPE = ($.browser.mozilla ? '.jpg' : '.png');
+var FILETYPE = '.png'; //($.browser.mozilla ? '.jpg' : '.png');
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
+var TIMEOUT = 50; //ms
 
 var ImgurZipAlbum = (function() {
     
@@ -47,7 +48,7 @@ var ImgurZipAlbum = (function() {
                 var data = getImgAsBase64(dis);
                 dataLoad(id, data, {base64:true});
             }
-        }, 10, this);
+        }, TIMEOUT, this);
     }
     
     //called when image fails to load
@@ -59,7 +60,7 @@ var ImgurZipAlbum = (function() {
             console.log('Failed: ' + id);
             
             checkZip();
-        }, 10, this);
+        }, TIMEOUT, this);
     }
     
     //called when base64/binary data is available
