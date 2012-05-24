@@ -62,7 +62,7 @@ var ImgurZipAlbum = (function() {
     {
         var id = $(this).attr('data-imgur-id');
         imageIDs = $(imageIDs).not([id]);
-        console.warn('Failed: ' + id);
+        console.log('Failed: ' + id);
         
         checkZip();
     }
