@@ -27,20 +27,6 @@ var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 
 var ImgurZipAlbum = (function() {
     
-    var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
-    var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
-    var zip = new JSZip();
-    
-    console.log('AlbumID = ' + albumID);
-    console.log('ImageIDs= ' + imageIDs);
-    
-    //make sure we have some image IDs
-    if( imageIDs.length === 0 )
-    {
-        alert("This album appears to be empty...");
-        return;
-    }
-    
     //called once the image has been downloaded
     function imgLoad()
     {
@@ -92,7 +78,24 @@ var ImgurZipAlbum = (function() {
         }
     }
     
-    //GO!
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
+    var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
+    var zip = new JSZip();
+    
+    console.log('AlbumID = ' + albumID);
+    console.log('ImageIDs= ' + imageIDs);
+    
+    //make sure we have some image IDs
+    if( imageIDs.length === 0 )
+    {
+        alert("This album appears to be empty...");
+        return;
+    }
+    
+    //start grabbing all the images
     for( var i in imageIDs )
     {
         if( !imageIDs.hasOwnProperty(i) )
