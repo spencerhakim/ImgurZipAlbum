@@ -7,8 +7,9 @@ if( !console )
 
 //make sure we're on imgur
 if( location.hostname !== 'imgur.com' )
-    console.log('Heyyy, this isnt imgur...');
-else
+    { console.log('Heyyy, this isnt imgur...'); }
+else {
+
 (function($) {
 
 //make sure this is an album
@@ -33,21 +34,11 @@ var ImgurZipAlbum = (function() {
     {
         setTimeout(function(dis) {
             var id = $(dis).data('imgur-id');
+            var data = getImgAsBase64(dis);
+            zip.file(id+FILETYPE, atob(data), {base64:false, binary:true} ); //store binary data in memory, should take up less space
+            console.log('Succesful: ' + id);
             
-            if( $.browser.mozilla ) //mozilla supports a faster method
-            {
-                var file = getImgAsFile(dis);
-                var fr = new FileReader();
-                fr.onload = (function(id){
-                    return function(e){ dataLoad(id, e.target.result, {base64:false, binary:true}); };
-                })(id);
-                fr.readAsBinaryString(file);
-            }
-            else
-            {
-                var data = getImgAsBase64(dis);
-                dataLoad(id, data, {base64:true});
-            }
+            checkZip();
         }, TIMEOUT, this);
     }
     
@@ -61,15 +52,6 @@ var ImgurZipAlbum = (function() {
             
             checkZip();
         }, TIMEOUT, this);
-    }
-    
-    //called when base64/binary data is available
-    function dataLoad(id, data, options)
-    {
-        zip.file(id+FILETYPE, data, options);
-        console.log('Succesful: ' + id);
-        
-        checkZip();
     }
     
     //called whenever an image is processed or fails to load
@@ -131,7 +113,7 @@ var ImgurZipAlbum = (function() {
     for( var i in imageIDs )
     {
         if( !imageIDs.hasOwnProperty(i) )
-            continue;
+            { continue; }
         
         $('<img />')
             .load(imgLoad)
@@ -141,21 +123,6 @@ var ImgurZipAlbum = (function() {
     }
     
 });
-
-//Eventually, browsers will implement canvas.toBlob, and I'll switch to that
-function getImgAsFile(img)
-{
-    // Create an empty canvas element
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    // Copy the image contents to the canvas
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    
-    return canvas.mozGetAsFile( $(this).data('imgur-id')+FILETYPE, MIMETYPE);
-}
 
 // http://stackoverflow.com/a/934925/489071
 function getImgAsBase64(img)
@@ -186,3 +153,5 @@ $.getScript(BASEURL + 'js/downloadify.min.js', function() {
 }); }); });
 
 })(jQuery);
+
+}
