@@ -1,3 +1,10 @@
+//make sure console(.log) is defined (don't really care if I leave it in)
+if( !console )
+{
+    console = console || {};
+    console.log = function(){};
+}
+
 //make sure we're on imgur
 if( location.hostname !== 'imgur.com' )
     console.log('Heyyy, this isnt imgur...');
@@ -52,7 +59,7 @@ var ImgurZipAlbum = (function() {
     function imgError()
     {
         var id = $(this).attr('data-imgur-id');
-        imageIDs = $(imageIDs).not([id]);
+        imageIDs = $(imageIDs).not([id]).get();
         console.log('Failed: ' + id);
         
         checkZip();
@@ -70,8 +77,11 @@ var ImgurZipAlbum = (function() {
     //called whenever an image is processed or fails to load
     function checkZip()
     {
+        var filesLoaded = Object.keys(zip.files).length;
+        statusDiv.html( statusMsg.replace('%IMGS%', filesLoaded).replace('%IMGL%', imageIDs.length) );
+        
         //make sure everything has been downloaded (or failed)
-        if( Object.keys(zip.files).length === imageIDs.length )
+        if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
             location.href = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
@@ -94,6 +104,14 @@ var ImgurZipAlbum = (function() {
         alert("This album appears to be empty...");
         return;
     }
+    
+    //add status div
+    $('body').append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px"><div id="imgurZipAlbum" class="textbox" /></div>') );
+    var statusDiv = $('#imgurZipAlbum');
+    
+    //initialize status
+    var statusMsg = '<img src="'+BASEURL+'media/loader.gif" /> %IMGS%/%IMGL% loaded';
+    statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
     
     //start grabbing all the images
     for( var i in imageIDs )
