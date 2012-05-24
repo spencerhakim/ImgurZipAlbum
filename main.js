@@ -84,7 +84,7 @@ var ImgurZipAlbum = (function() {
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
-            statusDiv.html('Generating zip... (your browser may freeze during this process)');
+            statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may freeze during this process)');
             location.href = "data:application/zip;base64," + zip.generate(); //don't use compression, takes up too much CPU
             $(body).remove(statusDiv);
         }
@@ -112,7 +112,7 @@ var ImgurZipAlbum = (function() {
     var statusDiv = $('#imgurZipAlbum');
     
     //initialize status
-    var statusMsg = '<img src="'+BASEURL+'media/loader.gif" /> %IMGS%/%IMGL% loaded';
+    var statusMsg = '<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> %IMGS%/%IMGL% loaded';
     statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
     
     //start grabbing all the images
