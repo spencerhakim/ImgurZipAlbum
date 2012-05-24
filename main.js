@@ -77,13 +77,16 @@ var ImgurZipAlbum = (function() {
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
+            $statusDiv = $statusDiv.parent();
+            
             $statusDiv.html('<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> Generating zip... (your browser may appear to freeze during this process)');
             $statusDiv.downloadify({
-                filename: albumID + '.zip',
+                filename: albumName + '.zip',
                 data: zip.generate(),
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
+                onComplete: function() { $statusDiv.remove(); $statusDiv = undefined; },
                 
                 swf: BASEURL + 'media/downloadify.swf',
                 downloadImage: BASEURL + 'media/download.png',
@@ -97,12 +100,12 @@ var ImgurZipAlbum = (function() {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    var albumID = $album.attr('id').split('-')[1] + ' - ' + $album.data('title');
+    var albumName = $album.attr('id').split('-')[1] + ' - ' + $album.data('title');
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
     var zip = new JSZip();
     
-    console.log('AlbumID = ' + albumID);
-    console.log('ImageIDs= ' + imageIDs);
+    console.log('Album name = ' + albumName);
+    console.log('Image IDs  = ' + imageIDs);
     
     //make sure we have some image IDs
     if( imageIDs.length === 0 )
