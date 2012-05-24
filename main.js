@@ -30,32 +30,36 @@ var ImgurZipAlbum = (function() {
     //called once the image has been downloaded
     function imgLoad()
     {
-        var id = $(this).data('imgur-id');
-        
-        if( $.browser.mozilla ) //mozilla supports a faster method
-        {
-            var file = getImgAsFile(this);
-            var fr = new FileReader();
-            fr.onload = (function(id){
-                return function(e){ dataLoad(id, e.target.result, {base64:false, binary:true}); };
-            })(id);
-            fr.readAsBinaryString(file);
-        }
-        else
-        {
-            var data = getImgAsBase64(this);
-            dataLoad(id, data, {base64:true});
-        }
+        setTimeout(function(dis) {
+            var id = $(dis).data('imgur-id');
+            
+            if( $.browser.mozilla ) //mozilla supports a faster method
+            {
+                var file = getImgAsFile(dis);
+                var fr = new FileReader();
+                fr.onload = (function(id){
+                    return function(e){ dataLoad(id, e.target.result, {base64:false, binary:true}); };
+                })(id);
+                fr.readAsBinaryString(file);
+            }
+            else
+            {
+                var data = getImgAsBase64(dis);
+                dataLoad(id, data, {base64:true});
+            }
+        }, 10, this);
     }
     
     //called when image fails to load
     function imgError()
     {
-        var id = $(this).data('imgur-id');
-        imageIDs = $(imageIDs).not([id]).get();
-        console.log('Failed: ' + id);
-        
-        checkZip();
+        setTimeout(function(dis) {
+            var id = $(dis).data('imgur-id');
+            imageIDs = $(imageIDs).not([id]).get();
+            console.log('Failed: ' + id);
+            
+            checkZip();
+        }, 10, this);
     }
     
     //called when base64/binary data is available
