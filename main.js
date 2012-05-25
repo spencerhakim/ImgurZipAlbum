@@ -48,6 +48,8 @@ var ImgurZipAlbum = (function() {
             imageIDs = $(imageIDs).not([id]).get();
             console.log('Failed: ' + id);
             
+            //TODO - log failed attempts in body
+            
             checkZip();
         }, TIMEOUT, this);
     }
@@ -106,6 +108,9 @@ var ImgurZipAlbum = (function() {
     //initialize status
     var statusMsg = '<span class="stat">%IMGS%</span> of <span class="stat">%IMGL%</span> images downloaded...';
     $statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
+    
+    //try to prevent leaving page
+    window.onbeforeunload = (function(){ return true; });
     
     //start grabbing all the images
     for( var i in imageIDs )
