@@ -73,7 +73,11 @@ var ImgurZipAlbum = (function() {
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
-                onComplete: function() { $statusDiv.remove(); $statusDiv = undefined; },
+                onComplete: function() {
+                    $statusDiv.remove();
+                    $statusDiv = undefined;
+                    window.onbeforeunload = (function(){ return false; });
+                },
                 
                 swf: BASEURL + 'media/downloadify.swf',
                 downloadImage: BASEURL + 'media/download.png',
