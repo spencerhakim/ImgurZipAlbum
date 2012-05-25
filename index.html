@@ -2,14 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ImgurZipAlbum</title>
+    <title>Imgur Zip Album</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+    body
+    {
+        padding-top: 5%;
+    }
+    
+    .center
+    {
+        float: none;
+        margin: 0 auto;
+        text-align: center;
+    }
+    </style>
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </head>
 <body>
-    Drag this bookmarklet (<a onclick="return false;" href="javascript:(function(){ document.body.appendChild(document.createElement('script')).src='http://spencerhakim.github.com/ImgurZipAlbum/main.js?x='+new Date().getTime(); })();">Download Album</a>) to your toolbar
+    <div class="container">
+        <div class="row center">
+            <h1>Drag this bookmarklet (<a onclick="alert('Drag it, don\'t click it!'); return false;" href="javascript:(function(){ document.body.appendChild(document.createElement('script')).src='http://spencerhakim.github.com/ImgurZipAlbum/main.js?x='+new Date().getTime(); })();">&#8690;Album</a>) to your toolbar.</h1>
+        </div>
+        <hr />
+        <div class="row span8 center" style="text-align:left">
+            <p>A handy bookmarklet that downloads and stores all images in an Imgur album into a single Zip archive.</p>
+            <p>A somewhat recent version of Google Chrome/Chromium, Safari, Firefox, or Opera (not tested, but should work) is required.</p>
+            <p>All processing is performed locally in your webbrowser; no information is sent <strong>anywhere</strong>.
+            This service is completely unaffiliated with Imgur and is &copy; 2012 Spencer Hakim, and licensed under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>.</p>
+            <hr />
+            <p>Imgur and the Imgur logo are either trademarks or registered trademarks of Imgur, LLC, and are &copy; 2012 Imgur, LLC. All rights reserved.</p>
+        </div>
+        <hr />
+        <div class="row center">
+            <figure>
+                <img src="media/screenshot1.jpg" />
+                <figcaption><em>Once the bookmarklet is clicked, the images in the album will begin to download.</em></figcaption>
+            </figure>
+            <figure>
+                <img src="media/screenshot2.jpg" />
+                <figcaption><em>When all images in the album have been downloaded, they will be stored into a Zip archive, which you can then save to your computer by clicking the "download" button shown.</em></figcaption>
+            </figure>
+        </div>
+    </div>
 </body>
 </html>
