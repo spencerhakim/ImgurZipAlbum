@@ -46,9 +46,24 @@ var ImgurZipAlbum = (function() {
         setTimeout(function(dis) {
             var id = $(dis).data('imgur-id');
             imageIDs = $(imageIDs).not([id]).get();
+            failedIDs.push(id);
             console.log('Failed: ' + id);
             
-            //TODO - log failed attempts in body
+            //create list of failed images
+            var $errorDiv = {};
+            if( ($errorDiv = $('#IZAerrors')).length === 0 )
+            {
+                //create div only on first error
+                $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001"><div class="textbox"><span style="font-weight:bold; color:red">Failed images</span><ul id="IZAerrors" style="list-style-position:inside"></ul></div></div>') );
+            }
+            $errorDiv.append('<li><a href="http://i.imgur.com/'+id+'.jpg">'+id+'</a></li>');
+            
+            //highlight affected images
+            $('[id$='+id+'] img, img[id$='+id+']')
+                .css('border', '3px solid red')
+                .css('box-sizing', 'border-box')
+                .css('-moz-box-sizing', 'border-box')
+                .css('-webkit-box-sizing', 'border-box');
             
             checkZip();
         }, TIMEOUT, this);
@@ -93,6 +108,7 @@ var ImgurZipAlbum = (function() {
     
     var albumName = $album.attr('id').split('-')[1] + ' - ' + $album.data('title');
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
+    var failedIDs = [];
     var zip = new JSZip();
     
     console.log('Album name = ' + albumName);
