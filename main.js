@@ -59,11 +59,7 @@ var ImgurZipAlbum = (function() {
             $errorDiv.append('<li><a href="http://i.imgur.com/'+id+'.jpg">'+id+'</a></li>');
             
             //highlight affected images
-            $('[id$='+id+'] img, img[id$='+id+']')
-                .css('border', '3px solid red')
-                .css('box-sizing', 'border-box')
-                .css('-moz-box-sizing', 'border-box')
-                .css('-webkit-box-sizing', 'border-box');
+            $('[id$='+id+'] img, img[id$='+id+']').css('outline', '3px solid red');
             
             checkZip();
         }, TIMEOUT, this);
