@@ -51,7 +51,7 @@ var ImgurZipAlbum = (function() {
             var id = $(dis).data('imgur-id');
             var data = atob(getImgAsBase64(dis));
             zip.file(id+FILETYPE, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
-            console.log('Succesful: '+id+', '+(data.length/1024)+'kB');
+            console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
             
             checkZip();
         }, TIMEOUT, this);
@@ -93,10 +93,10 @@ var ImgurZipAlbum = (function() {
                 //create div only on first error
                 $(window.body).append( $(ERRORDIVHTML) );
             }
-            $errorDiv.append('<li><a href="http://imgur.com/download/'+id+'">'+id+'</a></li>');
+            $errorDiv.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
             
             //highlight affected images
-            $('[id$='+id+'] img, img[id$='+id+']').css('outline', '3px solid red');
+            $( sprintf('[id$=%1] img, img[id$=%1]', id) ).css('outline', '3px solid red');
             
             checkZip();
         }, TIMEOUT, this);
@@ -112,7 +112,7 @@ var ImgurZipAlbum = (function() {
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
-            $statusDiv.html('Generating zip... (your browser may appear to freeze during this process)');
+            $statusDiv.html('Generating zip...');
             
             $statusDiv = $statusDiv.closest('.panel');
             $statusDiv.downloadify({
