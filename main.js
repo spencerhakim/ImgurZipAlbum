@@ -1,15 +1,15 @@
+//make sure we're on imgur
+if( location.hostname === 'imgur.com' )
+{
+
+(function($) {
+
 //make sure console(.log) is defined (don't really care if I leave it in)
 if( !console )
 {
     console = console || {};
     console.log = function(){};
 }
-
-//make sure we're on imgur
-if( location.hostname === 'imgur.com' )
-{
-
-(function($) {
 
 //make sure this is an album
 var $album = $('div[id^=album-].nodisplay');
@@ -25,6 +25,7 @@ var FILETYPE = '.jpg';
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
 var TIMEOUT = 50; //ms
 
+//main class
 var ImgurZipAlbum = (function() {
     
     //called once the image has been downloaded
@@ -39,6 +40,26 @@ var ImgurZipAlbum = (function() {
             checkZip();
         }, TIMEOUT, this);
     }
+    
+    // http://stackoverflow.com/a/934925/489071
+    function getImgAsBase64(img)
+    {
+        // Create an empty canvas element
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Copy the image contents to the canvas
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        // Get the data-URL formatted image
+        // Firefox supports PNG and JPEG. You could check img.src to
+        // guess the original format, but be aware the using "image/jpg"
+        // will re-encode the image.
+        var dataURL = canvas.toDataURL(MIMETYPE, 0.95);
+        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+    },
     
     //called when image fails to load
     function imgError()
@@ -56,7 +77,7 @@ var ImgurZipAlbum = (function() {
                 //create div only on first error
                 $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001"><div class="textbox"><span style="font-weight:bold; color:red">Failed images</span><ul id="IZAerrors" style="list-style-position:inside"></ul></div></div>') );
             }
-            $errorDiv.append('<li><a href="http://i.imgur.com/'+id+'.jpg">'+id+'</a></li>');
+            $errorDiv.append('<li><a href="http://imgur.com/download/'+id+'">'+id+'</a></li>');
             
             //highlight affected images
             $('[id$='+id+'] img, img[id$='+id+']').css('outline', '3px solid red');
@@ -87,7 +108,7 @@ var ImgurZipAlbum = (function() {
                 onComplete: function() {
                     $statusDiv.remove();
                     $statusDiv = undefined;
-                    window.onbeforeunload = (function(){ return false; });
+                    window.onbeforeunload = (function(){ /*return nothing*/ });
                 },
                 
                 swf: BASEURL + 'media/downloadify.swf',
@@ -126,7 +147,7 @@ var ImgurZipAlbum = (function() {
     $statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
     
     //try to prevent leaving page
-    window.onbeforeunload = (function(){ return true; });
+    window.onbeforeunload = (function(){ return; });
     
     //start grabbing all the images
     for( var i in imageIDs )
@@ -142,26 +163,6 @@ var ImgurZipAlbum = (function() {
     }
     
 });
-
-// http://stackoverflow.com/a/934925/489071
-function getImgAsBase64(img)
-{
-    // Create an empty canvas element
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    // Copy the image contents to the canvas
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-
-    // Get the data-URL formatted image
-    // Firefox supports PNG and JPEG. You could check img.src to
-    // guess the original format, but be aware the using "image/jpg"
-    // will re-encode the image.
-    var dataURL = canvas.toDataURL(MIMETYPE, 0.95);
-    return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-}
 
 //load helper scripts (jQuery should already be loaded by imgur)
 $.ajaxSetup({cache: true});
