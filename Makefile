@@ -8,16 +8,19 @@ JS_ENGINE ?= "`which node nodejs 2>/dev/null`"
 COMPILER = ${JS_ENGINE} ${BUILD_DIR}/bin/uglifyjs.js --unsafe --overwrite
 
 # Input files to be merged together. List in ordered required
-MODULES = ${SRC_DIR}/main.js
+MODULES = ${SRC_DIR}/intro.js \
+	${SRC_DIR}/ImgurZipAlbum.js \
+	${SRC_DIR}/main.js \
+	${SRC_DIR}/outro.js
 
 # Output
 IZA = ${OUT_DIR}/imgurzipalbum.min.js
 
 # Pre-processing
-# VERSION = $(shell cat version.txt)
 DATE = $(shell git log -1 --pretty=format:%ad)
+BASEURL = http:\/\/spencerhakim.github.com\/ImgurZipAlbum\/
 PREPROCESS = "sed 's/@@DATE@@/'\"${DATE}\"'/' | \
-	sed 's/@@VERSION@@/'\"${VERSION}\"'/'"
+	sed 's/@@BASEURL@@/'\"${BASEURL}\"'/'"
 
 ###########################################################
 
