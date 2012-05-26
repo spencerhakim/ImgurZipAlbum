@@ -24,10 +24,20 @@ var TIMEOUT = 50; //ms, between loading image and processing it (helps prevent f
 
 //define some stuff
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
-var STATUSDIVHTML = '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div class="textbox"><img src="%1media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span></div></div>';
-STATUSDIVHTML = sprintf(STATUSDIVHTML, BASEURL);
-var ERRORDIVHTML = '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001"><div class="textbox"><span style="font-weight:bold; color:red">Failed images</span><ul id="IZAerrors" style="list-style-position:inside"></ul></div></div>';
 var STATUSMSG = '<span class="stat">%1</span> of <span class="stat">%2</span> images downloaded...';
+var STATUSDIVHTML =
+    '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001">' +
+        '<div class="textbox">' +
+            '<img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span>' +
+        '</div>' +
+    '</div>';
+var ERRORDIVHTML =
+    '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001">' + 
+        '<div class="textbox">' +
+            '<span style="font-weight:bold; color:red">Failed images</span>' +
+            '<ul id="IZAerrors" style="list-style-position:inside"></ul>' +
+        '</div>' +
+    '</div>';
 
 //helper funcs
 function sprintf(str)
@@ -86,13 +96,13 @@ var ImgurZipAlbum = (function() {
             console.log('Failed: ' + id);
             
             //create list of failed images
-            var $errorDiv = {};
-            if( ($errorDiv = $('#IZAerrors')).length === 0 )
+            var $errorUl = {};
+            if( ($errorUl = $('#IZAerrors')).length === 0 )
             {
                 //create div only on first error
                 $(window.body).append( $(ERRORDIVHTML) );
             }
-            $errorDiv.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
+            $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
             
             //highlight affected images
             $( sprintf('[id$=%1] img, img[id$=%1]', id) ).css('outline', '3px solid red');
@@ -105,24 +115,24 @@ var ImgurZipAlbum = (function() {
     function checkZip()
     {
         var filesLoaded = Object.keys(zip.files).length;
-        $statusDiv.html( sprintf(STATUSMSG, filesLoaded, imageIDs.length) );
+        $statusSpan.html( sprintf(STATUSMSG, filesLoaded, imageIDs.length) );
         
         //make sure everything has been downloaded (or failed)
         if( filesLoaded === imageIDs.length )
         {
             console.log('Generating zip...');
-            $statusDiv.html('Generating zip...');
+            $statusSpan.html('Generating zip...');
             
-            $statusDiv = $statusDiv.closest('.panel');
-            $statusDiv.downloadify({
+            $statusSpan = $statusSpan.closest('.panel');
+            $statusSpan.downloadify({
                 filename: albumName + '.zip',
                 data: zip.generate(),
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
                 onComplete: function() {
-                    $statusDiv.remove();
-                    $statusDiv = undefined;
+                    $statusSpan.remove();
+                    $statusSpan = undefined;
                     window.onbeforeunload = (function(){ /*return nothing*/ });
                 },
                 
@@ -155,10 +165,10 @@ var ImgurZipAlbum = (function() {
     
     //add status div
     $(window.body).append( $(STATUSDIVHTML) );
-    var $statusDiv = $('#IZAstatus');
+    var $statusSpan = $('#IZAstatus');
     
     //initialize status
-    $statusDiv.html( sprintf(STATUSMSG, 0, imageIDs.length) );
+    $statusSpan.html( sprintf(STATUSMSG, 0, imageIDs.length) );
     
     //try to prevent leaving page
     window.onbeforeunload = (function(){ return; });
