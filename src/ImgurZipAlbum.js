@@ -33,7 +33,7 @@ var ImgurZipAlbum = (function(options) {
         setTimeout(function(dis) {
             var id = $(dis).data('imgur-id');
             var data = atob(getImgAsBase64(dis));
-            zip.file(id+options, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
+            zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
             console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
             
             checkZip();
