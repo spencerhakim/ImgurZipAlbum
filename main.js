@@ -1,8 +1,7 @@
 //make sure we're on imgur
-if( location.hostname === 'imgur.com' )
-{
-
+if( location.hostname === 'imgur.com' ) {
 (function($) {
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 //make sure console(.log) is defined (don't really care if I leave it in)
 if( !console )
@@ -19,11 +18,28 @@ if( $album.length === 0 )
     return;
 }
 
-//define some stuff
+//config
 var BASEURL = 'http://spencerhakim.github.com/ImgurZipAlbum/';
 var FILETYPE = '.jpg';
+var TIMEOUT = 50; //ms, between loading image and processing it (helps prevent freezing)
+
+//define some stuff
 var MIMETYPE = (FILETYPE === '.jpg' ? 'image/jpeg' : 'image/png');
-var TIMEOUT = 50; //ms
+var STATUSDIVHTML = '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div class="textbox"><img src="%1media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span></div></div>';
+STATUSDIVHTML = sprintf(STATUSDIVHTML, BASEURL);
+var ERRORDIVHTML = '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001"><div class="textbox"><span style="font-weight:bold; color:red">Failed images</span><ul id="IZAerrors" style="list-style-position:inside"></ul></div></div>';
+var STATUSMSG = '<span class="stat">%1</span> of <span class="stat">%2</span> images downloaded...';
+
+//helper funcs
+function sprintf(str)
+{
+    // sprintf('%1 %2', 'Hello', 'World!') === 'Hello World!'
+    for(var i=1, len=arguments.length; i < len; i++)
+    {
+        str = str.replace("%"+i, arguments[i]);
+    }
+    return str;
+}
 
 //main class
 var ImgurZipAlbum = (function() {
@@ -59,7 +75,7 @@ var ImgurZipAlbum = (function() {
         // will re-encode the image.
         var dataURL = canvas.toDataURL(MIMETYPE, 0.95);
         return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-    },
+    }
     
     //called when image fails to load
     function imgError()
@@ -75,7 +91,7 @@ var ImgurZipAlbum = (function() {
             if( ($errorDiv = $('#IZAerrors')).length === 0 )
             {
                 //create div only on first error
-                $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001"><div class="textbox"><span style="font-weight:bold; color:red">Failed images</span><ul id="IZAerrors" style="list-style-position:inside"></ul></div></div>') );
+                $(window.body).append( $(ERRORDIVHTML) );
             }
             $errorDiv.append('<li><a href="http://imgur.com/download/'+id+'">'+id+'</a></li>');
             
@@ -90,7 +106,7 @@ var ImgurZipAlbum = (function() {
     function checkZip()
     {
         var filesLoaded = Object.keys(zip.files).length;
-        $statusDiv.html( statusMsg.replace('%IMGS%', filesLoaded).replace('%IMGL%', imageIDs.length) );
+        $statusDiv.html( sprintf(STATUSMSG, filesLoaded, imageIDs.length) );
         
         //make sure everything has been downloaded (or failed)
         if( filesLoaded === imageIDs.length )
@@ -120,8 +136,8 @@ var ImgurZipAlbum = (function() {
         }
     }
     
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     
     var albumName = $album.attr('id').split('-')[1] + ' - ' + $album.data('title');
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
@@ -139,12 +155,11 @@ var ImgurZipAlbum = (function() {
     }
     
     //add status div
-    $(window.body).append( $('<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001"><div class="textbox"><img src="'+BASEURL+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span></div></div>') );
+    $(window.body).append( $(STATUSDIVHTML) );
     var $statusDiv = $('#IZAstatus');
     
     //initialize status
-    var statusMsg = '<span class="stat">%IMGS%</span> of <span class="stat">%IMGL%</span> images downloaded...';
-    $statusDiv.html( statusMsg.replace('%IMGS%', 0).replace('%IMGL%', imageIDs.length) );
+    $statusDiv.html( sprintf(STATUSMSG, 0, imageIDs.length) );
     
     //try to prevent leaving page
     window.onbeforeunload = (function(){ return; });
@@ -159,11 +174,12 @@ var ImgurZipAlbum = (function() {
             .load(imgLoad)
             .error(imgError)
             .data('imgur-id', imageIDs[i])
-            .attr('src', 'http://imgur.com/download/'+imageIDs[i]);
+            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
     }
     
 });
 
+//START HERE
 //load helper scripts (jQuery should already be loaded by imgur)
 $.ajaxSetup({cache: true});
 $.getScript(BASEURL + 'js/jszip.js', function() {
@@ -172,6 +188,5 @@ $.getScript(BASEURL + 'js/downloadify.min.js', function() {
     ImgurZipAlbum(); //fire off processing
 }); }); });
 
-})(jQuery);
-
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+})(jQuery); }
