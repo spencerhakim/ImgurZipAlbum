@@ -185,20 +185,12 @@ if( $('div[id^=album-].nodisplay').length === 0 )
     return;
 }
 
-//alert if failed to load a helper script
-function failedGetScript(jqxhr, settings, exception)
-{
-    alert('Failed to load: ' + settings.url);
-}
-
 //load helper scripts (jQuery should already be loaded by imgur)
 $.ajaxSetup({cache: true});
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/swfobject.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js', function() {
     ImgurZipAlbum(); //fire off processing
-}).fail(failedGetScript);
-}).fail(failedGetScript);
-}).fail(failedGetScript);
+}); }); });
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 })(jQuery); }
