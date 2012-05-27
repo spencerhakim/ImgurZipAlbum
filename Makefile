@@ -5,7 +5,7 @@ OUT_DIR = ${PREFIX}/min
 
 # Locate node.js
 JS_ENGINE ?= "`which node nodejs 2>/dev/null`"
-COMPILER = ${JS_ENGINE} ${BUILD_DIR}/bin/uglifyjs.js --unsafe --overwrite
+COMPILER = ${JS_ENGINE} ${BUILD_DIR}/bin/uglifyjs.js --unsafe
 
 # Input files to be merged together. List in ordered required
 MODULES = ${SRC_DIR}/intro.js \
@@ -14,7 +14,8 @@ MODULES = ${SRC_DIR}/intro.js \
 	${SRC_DIR}/outro.js
 
 # Output
-IZA = ${OUT_DIR}/imgurzipalbum.min.js
+IZA = ${OUT_DIR}/imgurzipalbum.js
+IZA_MIN = ${OUT_DIR}/imgurzipalbum.min.js
 
 # Pre-processing
 DATE = $(shell git log -1 --pretty=format:%ad)
@@ -48,7 +49,7 @@ hint: iza
 
 minify: iza
 	@@echo "Uglify-ing..."
-	@@${COMPILER} ${IZA}
+	@@${COMPILER} ${IZA} > ${IZA_MIN}
 
 ###########################################################
 

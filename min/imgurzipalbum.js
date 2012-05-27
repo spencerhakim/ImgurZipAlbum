@@ -1,10 +1,13 @@
+if( location.hostname === 'imgur.com' ) { //make sure we're on imgur
+(function($) {
+///////////////////////////////////////////////////////////////////////////////////////////////////
 var ImgurZipAlbum = (function(options) {
     
     //defaults
     if( !options )
         { options = {}; }
     var opt = {
-        baseurl: '@@BASEURL@@',
+        baseurl: 'http://spencerhakim.github.com/ImgurZipAlbum/',
         filetype: '.jpg',
         timeout: 50
     };
@@ -175,3 +178,27 @@ var ImgurZipAlbum = (function(options) {
     }
     
 });
+//make sure this is an album
+if( $('div[id^=album-].nodisplay').length === 0 )
+{
+    alert('Hey, this isn\'t an album!');
+    return;
+}
+
+//alert if failed to load a helper script
+function failedGetScript(jqxhr, settings, exception)
+{
+    alert('Failed to load: ' + settings.url);
+}
+
+//load helper scripts (jQuery should already be loaded by imgur)
+$.ajaxSetup({cache: true});
+$.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip.js', function() {
+$.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/swfobject.js', function() {
+$.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js', function() {
+    ImgurZipAlbum(); //fire off processing
+}).fail(failedGetScript);
+}).fail(failedGetScript);
+}).fail(failedGetScript);
+///////////////////////////////////////////////////////////////////////////////////////////////////
+})(jQuery); }
