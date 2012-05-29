@@ -3,33 +3,6 @@ if( location.hostname === 'imgur.com' ) { //make sure we're on imgur
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 var ImgurZipAlbum = (function(options) {
     
-    //defaults
-    if( !options )
-        { options = {}; }
-    var opt = {
-        baseurl: 'http://spencerhakim.github.com/ImgurZipAlbum/',
-        filetype: '.jpg',
-        timeout: 50
-    };
-    opt = $.extend(opt, options);
-    
-    //define some stuff
-    var MIMETYPE = (opt.filetype === '.jpg' ? 'image/jpeg' : 'image/png');
-    var STATUSMSG = '<span class="stat">%1</span> of <span class="stat">%2</span> images downloaded...';
-    var STATUSDIVHTML =
-        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001">' +
-            '<div class="textbox">' +
-                '<img src="'+opt.baseurl+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span>' +
-            '</div>' +
-        '</div>';
-    var ERRORDIVHTML =
-        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001">' + 
-            '<div class="textbox">' +
-                '<span style="font-weight:bold; color:red">Failed images</span>' +
-                '<ul id="IZAerrors" style="list-style-position:inside"></ul>' +
-            '</div>' +
-        '</div>';
-    
     //called once the image has been downloaded
     function imgLoad()
     {
@@ -135,6 +108,33 @@ var ImgurZipAlbum = (function(options) {
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    //defaults
+    if( !options )
+        { options = {}; }
+    var opt = {
+        baseurl: 'http://spencerhakim.github.com/ImgurZipAlbum/',
+        filetype: '.jpg',
+        timeout: 50
+    };
+    opt = $.extend(opt, options);
+    
+    //define some stuff
+    var MIMETYPE = (opt.filetype === '.jpg' ? 'image/jpeg' : 'image/png');
+    var STATUSMSG = '<span class="stat">%1</span> of <span class="stat">%2</span> images downloaded...';
+    var STATUSDIVHTML =
+        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001">' +
+            '<div class="textbox">' +
+                '<img src="'+opt.baseurl+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span>' +
+            '</div>' +
+        '</div>';
+    var ERRORDIVHTML =
+        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001">' + 
+            '<div class="textbox">' +
+                '<span style="font-weight:bold; color:red">Failed images</span>' +
+                '<ul id="IZAerrors" style="list-style-position:inside"></ul>' +
+            '</div>' +
+        '</div>';
     
     var albumName = (function() {
         var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
