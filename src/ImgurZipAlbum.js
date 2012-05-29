@@ -133,10 +133,11 @@ var ImgurZipAlbum = (function(options) {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    var albumName =
-        $('div[id^=album-].nodisplay').attr('id').split('-')[1] +
-        ' - ' + 
-        $('div[id^=album-].nodisplay').data('title');
+    var albumName = (function() {
+        var albumID = $('div[id^=album-].nodisplay').attr('id').split('-')[1];
+        var albumTitle = $('div[id^=album-].nodisplay').data('title');
+        return sprintf('%1%2', albumID, (albumTitle.length > 0 ? ' - ' + albumTitle : ''));
+    })();
     var imageIDs = $('.jcarousel ul li img').map(function(){ return this.id.split('-')[1]; }).get();
     var failedIDs = [];
     var zip = new JSZip();
