@@ -5,14 +5,17 @@ var ImgurZipAlbum = (function(options) {
     //called once the image has been downloaded
     function imgLoad()
     {
-        setTimeout(function(dis) {
-            var id = $(dis).data('imgur-id');
-            var data = atob(getImgAsBase64(dis));
-            zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
-            console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
-            
-            checkZip();
-        }, opt.timeout, this);
+        setTimeout((function(dis){
+            return function()
+            {
+                var id = $(dis).data('imgur-id');
+                var data = atob(getImgAsBase64(dis));
+                zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
+                console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
+                
+                checkZip();
+            };
+        })(this), opt.timeout);
     }
     
     // http://stackoverflow.com/a/934925/489071
@@ -38,26 +41,29 @@ var ImgurZipAlbum = (function(options) {
     //called when image fails to load
     function imgError()
     {
-        setTimeout(function(dis) {
-            var id = $(dis).data('imgur-id');
-            imageIDs = $(imageIDs).not([id]).get();
-            failedIDs.push(id);
-            console.log('Failed: ' + id);
-            
-            //create list of failed images
-            var $errorUl = {};
-            if( ($errorUl = $('#IZAerrors')).length === 0 )
+        setTimeout((function(dis){
+            return function()
             {
-                //create div only on first error
-                $(window.body).append( $(ERRORDIVHTML) );
-            }
-            $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
-            
-            //highlight affected images
-            $( sprintf('[id$=%1] img, img[id$=%1]', id) ).css('outline', '3px solid red');
-            
-            checkZip();
-        }, opt.timeout, this);
+                var id = $(dis).data('imgur-id');
+                imageIDs = $(imageIDs).not([id]).get();
+                failedIDs.push(id);
+                console.log('Failed: ' + id);
+                
+                //create list of failed images
+                var $errorUl = {};
+                if( ($errorUl = $('#IZAerrors')).length === 0 )
+                {
+                    //create div only on first error
+                    $(window.body).append( $(ERRORDIVHTML) );
+                }
+                $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
+                
+                //highlight affected images
+                $( sprintf('[id$=%1] img, img[id$=%1]', id) ).css('outline', '3px solid red');
+                
+                checkZip();
+            };
+        })(this), opt.timeout);
     }
     
     //called whenever an image is processed or fails to load
