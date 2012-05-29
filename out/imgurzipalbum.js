@@ -193,17 +193,15 @@ $.ajaxSetup({cache: true});
 //Fuck you, IE
 if( !window.atob || !window.btoa )
 {
-    $.ajax({
-        url: 'http://stringencoders.googlecode.com/svn/trunk/javascript/base64.js',
-        async: false,
-        dataType: 'script'
+    $.ajaxSetup({async: false});
+    $.getScript('http://stringencoders.googlecode.com/svn/trunk/javascript/base64.js', function() {
+        if( !window.atob )
+            { window.btoa = base64.encode; }
+        
+        if( !window.atob )
+            { window.atob = base64.decode; }
     });
-    
-    if( !window.atob )
-        { window.btoa = base64.encode; }
-    
-    if( !window.atob )
-        { window.atob = base64.decode; }
+    $.ajaxSetup({async: true});
 }
 
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip.js', function() {
