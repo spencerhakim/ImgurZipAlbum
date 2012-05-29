@@ -1,7 +1,7 @@
 PREFIX = .
 SRC_DIR = ${PREFIX}/src
 BUILD_DIR = ${PREFIX}/build
-OUT_DIR = ${PREFIX}/min
+OUT_DIR = ${PREFIX}/out
 
 # Locate node.js
 JS_ENGINE ?= "`which node nodejs 2>/dev/null`"
