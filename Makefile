@@ -41,7 +41,6 @@ ${IZA}: ${MODULES} | ${OUT_DIR}
 
 hint: iza
 	@@if test ! -z ${JS_ENGINE}; then \
-		echo "Testing against JSHint..."; \
 		${JS_ENGINE} ${BUILD_DIR}/jshint-check.js ${IZA}; \
 	else \
 		echo "You must have NodeJS installed in order to test against JSHint."; \

@@ -1,6 +1,8 @@
 if( location.hostname === 'imgur.com' ) { //make sure we're on imgur
 (function($) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+/*global JSZip: false */
+
 var ImgurZipAlbum = (function(options) {
     
     //called once the image has been downloaded
@@ -166,11 +168,8 @@ var ImgurZipAlbum = (function(options) {
     window.onbeforeunload = (function(){ return; });
     
     //start grabbing all the images
-    for( var i in imageIDs )
+    for( var i=0, len=imageIDs.length; i < len; i++ )
     {
-        if( !imageIDs.hasOwnProperty(i) )
-            { continue; }
-        
         $('<img />')
             .load(imgLoad)
             .error(imgError)
