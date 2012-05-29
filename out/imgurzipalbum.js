@@ -178,6 +178,8 @@ var ImgurZipAlbum = (function(options) {
     }
     
 });
+/*global base64: false */
+
 //make sure this is an album
 if( $('div[id^=album-].nodisplay').length === 0 )
 {
@@ -187,6 +189,23 @@ if( $('div[id^=album-].nodisplay').length === 0 )
 
 //load helper scripts (jQuery should already be loaded by imgur)
 $.ajaxSetup({cache: true});
+
+//Fuck you, IE
+if( !window.atob || !window.btoa )
+{
+    $.ajax({
+        url: 'http://stringencoders.googlecode.com/svn/trunk/javascript/base64.js',
+        async: false,
+        dataType: 'script'
+    });
+    
+    if( !window.atob )
+        { window.btoa = base64.encode; }
+    
+    if( !window.atob )
+        { window.atob = base64.decode; }
+}
+
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/swfobject.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js', function() {
