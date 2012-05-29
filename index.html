@@ -31,7 +31,13 @@
         text-decoration: underline;
         color: #FFF;
     }
+    
+    .sorry
+    {
+        color: #F33;
+    }
     </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -52,7 +58,7 @@
         <div class="row center">
             <h1><img src="media/logo.png" alt="Imgur Album&8628;" title="Imgur Album&#8628;" /></h1>
         </div>
-        <div class="row center">
+        <div class="row center" id="mainRow">
             <h2>
                 Drag this bookmarklet
                 (<a onclick="alert('Drag me, don\'t click me!'); return false;" href="javascript:(function(){ document.body.appendChild(document.createElement('script')).src='http://spencerhakim.github.com/ImgurZipAlbum/out/imgurzipalbum.min.js?x='+new Date().getTime(); })();" title="Album&#8628;">Album<span>&#8628;</span></a>)
@@ -67,7 +73,10 @@
                 To use it, just click it while viewing an Imgur album. The individual images will begin downloading in the background, with the progress appearing in the lower-left corner of the screen.
                 Once complete, the progress message will by replaced by a download button. Just click it, choose where to save the Zip archive, and it will be instantly saved. That's it.
             </p>
-            <p>A somewhat recent version of Google Chrome/Chromium, Safari, Firefox, or Opera (not tested, but should work) is required.</p>
+            <p>
+                You can check browser support here: <a href="http://en.wikipedia.org/wiki/Canvas_element#Support">"Canvas element#Support" on Wikipedia</a>.<br />
+                <strong>tl;dr</strong> - No support for IE8 or older.
+            </p>
             <p>
                 All processing is performed locally in your webbrowser; no information is sent <span class="emph">anywhere</span>.
                 This tool is completely unaffiliated with Imgur and is licensed under the <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>.
@@ -88,5 +97,36 @@
             </figure>
         </div>
     </div>
+    <script>
+        function supports_canvas()
+        {
+            return !!document.createElement('canvas').getContext;
+        }
+         
+        function supportsToDataURL()
+        {
+            if( !supports_canvas() )
+                return false;
+            
+            try
+            {
+                var c = document.createElement("canvas");
+                var data = c.toDataURL("image/png");
+                return (data.indexOf("data:image/png") == 0);
+            }
+            catch(ex)
+            {
+                return false;
+            }
+        }
+        
+        if( !supportsToDataURL() )
+        {
+            $('#mainRow').html(
+                '<h2 class="sorry">Sorry, looks like your browser doesn\'t have the required feature support.</h2>' +
+                '<h4 class="sorry">You should definitely consider <a href="http://browsehappy.com/">upgrading to newer tech.</a></h4>'
+            );
+        }
+    </script>
 </body>
 </html>
