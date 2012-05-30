@@ -2,7 +2,7 @@ Imgur Zip Album
 =============
 
 A handy bookmarklet that downloads and stores all images in an Imgur album into a single Zip archive.
-A somewhat recent version of Google Chrome/Chromium, Safari, Firefox, or Opera (not tested, but should work) is required.
+Any browser that isn't IE8 or older is required, along with Adobe Flash 10 or newer.
 
 **See more [here](http://spencerhakim.github.com/ImgurZipAlbum/).**
 
