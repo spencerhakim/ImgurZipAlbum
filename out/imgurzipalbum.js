@@ -62,7 +62,8 @@ var ImgurZipAlbum = (function(options) {
                 $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
                 
                 //highlight affected images
-                $( sprintf('[id$=%1] img, img[id$=%1]', id) ).css('outline', '3px solid red');
+                $( sprintf('[id=%1] img', id) ).css('outline', '3px solid red');
+                $( sprintf('img[id=thumb-%1]', id) ).css('border', '3px solid red');
                 
                 checkZip();
             };
