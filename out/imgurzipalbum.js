@@ -109,7 +109,7 @@ var ImgurZipAlbum = (function(options) {
         // sprintf('%1 %2', 'Hello', 'World!') === 'Hello World!'
         for(var i=1, len=arguments.length; i < len; i++)
         {
-            str = str.replace("%"+i, arguments[i]);
+            str = str.replace( new RegExp('%'+i, 'g'), arguments[i] );
         }
         return str;
     }
