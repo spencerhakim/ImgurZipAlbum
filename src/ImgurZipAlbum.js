@@ -127,13 +127,13 @@ var ImgurZipAlbum = (function(options) {
     var MIMETYPE = (opt.filetype === '.jpg' ? 'image/jpeg' : 'image/png');
     var STATUSMSG = '<span class="stat">%1</span> of <span class="stat">%2</span> images downloaded...';
     var STATUSDIVHTML =
-        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:+1001">' +
+        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; padding:10px; z-index:1000">' +
             '<div class="textbox">' +
                 '<img src="'+opt.baseurl+'media/loader.gif" style="vertical-align:text-bottom" /> <span id="IZAstatus"></span>' +
             '</div>' +
         '</div>';
     var ERRORDIVHTML =
-        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:+1001">' + 
+        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:1000; overflow-y:auto; max-height:'+($(window).height() * 0.95)+'px">' + 
             '<div class="textbox">' +
                 '<span style="font-weight:bold; color:red">Failed images</span>' +
                 '<ul id="IZAerrors" style="list-style-position:inside"></ul>' +
