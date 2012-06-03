@@ -19,23 +19,21 @@ var ImgurZipAlbum = (function(options) {
     }
     
     // http://stackoverflow.com/a/934925/489071
+    var canvas = document.createElement("canvas"); // reuse canvas element
     function getImgAsBase64(img)
     {
-        // Create an empty canvas element
-        var canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
 
         // Copy the image contents to the canvas
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+        canvas.getContext("2d").drawImage(img, 0, 0);
 
         // Get the data-URL formatted image
         // Firefox supports PNG and JPEG. You could check img.src to
         // guess the original format, but be aware the using "image/jpg"
         // will re-encode the image.
-        var dataURL = canvas.toDataURL(MIMETYPE, 0.95);
-        return dataURL.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+        return canvas.toDataURL(MIMETYPE, 0.95)
+            .replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
     }
     
     //called when image fails to load
