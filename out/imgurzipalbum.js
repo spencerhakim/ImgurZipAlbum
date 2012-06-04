@@ -83,13 +83,12 @@ var ImgurZipAlbum = (function(options) {
         //make sure everything has been downloaded (or failed)
         if( filesLoaded === imageIDs.length )
         {
-            console.log('Generating zip...');
-            $statusSpan.html('Generating zip...');
+            console.log('Completed.');
             
             $statusSpan = $statusSpan.closest('.panel');
             $statusSpan.downloadify({
                 filename: albumName + '.zip',
-                data: function(){ return zip.generate(); },
+                data: function(){ return zip.generate({compression:'DEFLATE'}); },
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
@@ -217,10 +216,11 @@ if( !window.atob || !window.btoa )
 }
 
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip.js', function() {
+$.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/jszip-deflate.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/swfobject.js', function() {
 $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js', function() {
     ImgurZipAlbum(); //fire off processing
-}); }); });
+}); }); }); });
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 })(jQuery);
 

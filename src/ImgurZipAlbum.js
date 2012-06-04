@@ -80,13 +80,12 @@ var ImgurZipAlbum = (function(options) {
         //make sure everything has been downloaded (or failed)
         if( filesLoaded === imageIDs.length )
         {
-            console.log('Generating zip...');
-            $statusSpan.html('Generating zip...');
+            console.log('Completed.');
             
             $statusSpan = $statusSpan.closest('.panel');
             $statusSpan.downloadify({
                 filename: albumName + '.zip',
-                data: function(){ return zip.generate(); },
+                data: function(){ return zip.generate({compression:'DEFLATE'}); },
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
