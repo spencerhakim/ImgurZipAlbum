@@ -15,10 +15,6 @@ var ImgurZipAlbum = (function(options) {
                 var id = $(dis).data('imgur-id');
                 var data = atob(getImgAsBase64(dis));
                 
-                //unload image from memory
-                dis.onerror = dis.onload = function(){};
-                dis.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-                
                 zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
                 console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
                 
@@ -186,10 +182,11 @@ var ImgurZipAlbum = (function(options) {
     for( var i=0, len=imageIDs.length; i < len; i++ )
     {
         var img = new Image();
-        img.onload = imgLoad;
-        img.onerror = imgError;
-        $(img).data('imgur-id', imageIDs[i]);
-        img.src = 'http://imgur.com/download/'+imageIDs[i]; //set src last
+        $(img)
+            .load(imgLoad)
+            .error(imgError)
+            .data('imgur-id', imageIDs[i])
+            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
     }
     
 });
