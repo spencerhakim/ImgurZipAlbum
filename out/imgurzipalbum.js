@@ -92,7 +92,7 @@ var ImgurZipAlbum = (function(options) {
                 data: function(){ return zip.generate(); },
                 dataType: 'base64',
                 
-                onError: function(){ alert('An error occurred, sorry!'); },
+                onError: function(){ alert('An error occurred, sorry!\nIt\'s possible that the album is too large (in the number of images and/or image resolution) to store in memory.'); },
                 onComplete: function() {
                     $statusSpan.remove();
                     $statusSpan = undefined;
@@ -142,8 +142,8 @@ var ImgurZipAlbum = (function(options) {
             '</div>' +
         '</div>';
     var ERRORDIVHTML =
-        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:1000; overflow-y:auto; max-height:'+($(window).height() * 0.95)+'px">' + 
-            '<div class="textbox">' +
+        '<div class="panel" style="display:inline-block; position:fixed; bottom:0; right:0; padding:10px; z-index:1000">' + 
+            '<div class="textbox" style="overflow-y:auto; max-height:'+($(window).height() * 0.95)+'px">' +
                 '<span style="font-weight:bold; color:red">Failed images</span>' +
                 '<ul id="IZAerrors" style="list-style-position:inside"></ul>' +
             '</div>' +
