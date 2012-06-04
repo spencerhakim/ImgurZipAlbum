@@ -11,8 +11,14 @@ var ImgurZipAlbum = (function(options) {
         setTimeout((function(dis){
             return function()
             {
+                //get image ID and binary data
                 var id = $(dis).data('imgur-id');
                 var data = atob(getImgAsBase64(dis));
+                
+                //unload image from memory
+                dis.onerror = dis.onload = null;
+                dis.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+                
                 zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
                 console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
                 
@@ -45,7 +51,10 @@ var ImgurZipAlbum = (function(options) {
         setTimeout((function(dis){
             return function()
             {
+                //get image ID
                 var id = $(dis).data('imgur-id');
+                
+                //remove ID from original list and add to list of failures
                 imageIDs = $(imageIDs).not([id]).get();
                 failedIDs.push(id);
                 console.log('Failed: ' + id);
@@ -175,11 +184,12 @@ var ImgurZipAlbum = (function(options) {
     //start grabbing all the images
     for( var i=0, len=imageIDs.length; i < len; i++ )
     {
-        $('<img />')
+        var img = new Image();
+        $(img)
             .load(imgLoad)
             .error(imgError)
             .data('imgur-id', imageIDs[i])
-            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
+            .src = 'http://imgur.com/download/'+imageIDs[i]; //set src last
     }
     
 });
