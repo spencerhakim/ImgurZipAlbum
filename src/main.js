@@ -25,8 +25,7 @@ if( !window.atob || !window.btoa )
 }
 
 $.getScript('@@BASEURL@@js/jszip.js', function() {
-$.getScript('@@BASEURL@@js/jszip-deflate.js', function() {
 $.getScript('@@BASEURL@@js/swfobject.js', function() {
 $.getScript('@@BASEURL@@js/downloadify.min.js', function() {
     ImgurZipAlbum(); //fire off processing
-}); }); }); });
+}); }); });
