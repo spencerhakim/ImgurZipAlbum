@@ -13,7 +13,7 @@ var ImgurZipAlbum = (function(options) {
                 var data = atob(getImgAsBase64(dis));
                 
                 //unload image from memory
-                dis.onerror = dis.onload = null;
+                dis.onerror = dis.onload = function(){};
                 dis.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
                 
                 zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
@@ -61,7 +61,8 @@ var ImgurZipAlbum = (function(options) {
                 if( ($errorUl = $('#IZAerrors')).length === 0 )
                 {
                     //create div only on first error
-                    $(window.body).append( ($errorUl = $(ERRORDIVHTML)) );
+                    $(window.body).append( $(ERRORDIVHTML) );
+                    $errorUl = $('#IZAerrors');
                 }
                 $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
                 
@@ -89,7 +90,7 @@ var ImgurZipAlbum = (function(options) {
             $statusSpan = $statusSpan.closest('.panel');
             $statusSpan.downloadify({
                 filename: albumName + '.zip',
-                data: zip.generate(),
+                data: function(){ return zip.generate(); },
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!'); },
@@ -186,7 +187,7 @@ var ImgurZipAlbum = (function(options) {
             .load(imgLoad)
             .error(imgError)
             .data('imgur-id', imageIDs[i])
-            .src = 'http://imgur.com/download/'+imageIDs[i]; //set src last
+            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
     }
     
 });
