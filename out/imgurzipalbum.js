@@ -64,7 +64,7 @@ var ImgurZipAlbum = (function(options) {
                 if( ($errorUl = $('#IZAerrors')).length === 0 )
                 {
                     //create div only on first error
-                    $(window.body).append( $(ERRORDIVHTML) );
+                    $(window.body).append( ($errorUl = $(ERRORDIVHTML)) );
                 }
                 $errorUl.append( sprintf('<li><a href="http://imgur.com/download/%1">%1</a></li>', id) );
                 
