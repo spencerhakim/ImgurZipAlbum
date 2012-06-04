@@ -215,4 +215,10 @@ $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js'
     ImgurZipAlbum(); //fire off processing
 }); }); });
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-})(jQuery); }
+})(jQuery);
+
+}
+else
+{
+    location.href = 'http://spencerhakim.github.com/ImgurZipAlbum/'; //function as regular bookmark
+}
