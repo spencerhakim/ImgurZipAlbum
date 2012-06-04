@@ -183,11 +183,10 @@ var ImgurZipAlbum = (function(options) {
     for( var i=0, len=imageIDs.length; i < len; i++ )
     {
         var img = new Image();
-        $(img)
-            .load(imgLoad)
-            .error(imgError)
-            .data('imgur-id', imageIDs[i])
-            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
+        img.onload = imgLoad;
+        img.onerror = imgError;
+        $(img).data('imgur-id', imageIDs[i]);
+        img.src = 'http://imgur.com/download/'+imageIDs[i]; //set src last
     }
     
 });
