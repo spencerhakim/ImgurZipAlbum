@@ -1,5 +1,13 @@
 if( location.hostname === 'imgur.com' ) { //make sure we're on imgur
 (function($) {
+
+//make sure console(.log) is defined (don't really care if I leave it in)
+//window.console is used to avoid JSHint errors
+if( !window.console )
+{
+    window.console = {};
+    window.console.log = function(){};
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /*global JSZip: false */
 
@@ -223,9 +231,6 @@ $.getScript('http://spencerhakim.github.com/ImgurZipAlbum/js/downloadify.min.js'
 }); }); });
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 })(jQuery);
-
-}
-else
-{
+} else {
     location.href = 'http://spencerhakim.github.com/ImgurZipAlbum/'; //function as regular bookmark
 }
