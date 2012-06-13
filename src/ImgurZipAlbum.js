@@ -86,7 +86,7 @@ var ImgurZipAlbum = (function(options) {
             $statusSpan = $statusSpan.closest('.panel');
             $statusSpan.downloadify({
                 filename: albumName + '.zip',
-                data: function(){ return zip.generate(); },
+                data: zip.generate(),
                 dataType: 'base64',
                 
                 onError: function(){ alert('An error occurred, sorry!\nIt\'s possible that the album is too large (in the number of images and/or image resolution) to store in memory.'); },
