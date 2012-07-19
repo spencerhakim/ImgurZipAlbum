@@ -197,7 +197,7 @@ var ImgurZipAlbum = (function(options) {
             .load(imgLoad)
             .error(imgError)
             .data('imgur-id', id)
-            .data('filename', sprintf('%1 - %2%3', i, id, (titleText === '' ? '' : ' - ' + titleText)) )
+            .data('filename', sprintf('%1 - %2%3', i+1, id, (titleText === '' ? '' : ' - ' + titleText)) )
             .attr('src', 'http://imgur.com/download/'+id); //set src last
     }
     
