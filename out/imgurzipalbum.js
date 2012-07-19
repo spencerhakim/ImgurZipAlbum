@@ -21,9 +21,10 @@ var ImgurZipAlbum = (function(options) {
             {
                 //get image ID and binary data
                 var id = $(dis).data('imgur-id');
+                var filename = $(dis).data('filename');
                 var data = atob(getImgAsBase64(dis));
                 
-                zip.file(id+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
+                zip.file(filename+opt.filetype, data, {base64:false, binary:true} ); //store binary data in memory, should take up less space
                 console.log( sprintf('Succesful: %1, %2kB', id, (data.length/1024).toFixed(2)) );
                 
                 checkZip();
@@ -189,12 +190,15 @@ var ImgurZipAlbum = (function(options) {
     //start grabbing all the images
     for( var i=0, len=imageIDs.length; i < len; i++ )
     {
+        var id = imageIDs[i];
         var img = new Image();
+        var titleText = $('.image#'+id+' > h2').text();
         $(img)
             .load(imgLoad)
             .error(imgError)
-            .data('imgur-id', imageIDs[i])
-            .attr('src', 'http://imgur.com/download/'+imageIDs[i]); //set src last
+            .data('imgur-id', id)
+            .data('filename', sprintf('%1 - %2%3', i, id, (titleText === '' ? '' : ' - ' + titleText)) )
+            .attr('src', 'http://imgur.com/download/'+id); //set src last
     }
     
 });
